@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Interview Preparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="globalstyle.css" />
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface-2: #f8faff;
+    --border: #e2e8f8;
+    --accent: #4f6ef7;
+    --accent-light: #eef1fe;
+    --accent-dark: #3a56d4;
+    --green: #22c55e;
+    --green-light: #dcfce7;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --purple: #8b5cf6;
+    --purple-light: #f5f3ff;
+    --teal: #0d9488;
+    --teal-light: #f0fdfa;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+    --shadow-md: 0 4px 16px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.04);
+    --shadow-lg: 0 10px 32px rgba(15,23,42,0.10), 0 4px 12px rgba(15,23,42,0.06);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 1.05rem; color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-badge {
+    background: var(--accent-light); color: var(--accent);
+    font-size: 0.7rem; font-weight: 600; padding: 2px 8px;
+    border-radius: 20px; letter-spacing: 0.04em;
+  }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb-bar {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 2rem;
+  }
+  .breadcrumb {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; color: var(--text-muted);
+  }
+  .breadcrumb a {
+    color: var(--accent); text-decoration: none; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .breadcrumb a:hover { color: var(--accent-dark); }
+  .breadcrumb .sep { color: var(--text-muted); font-size: 0.75rem; }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 1200px; margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    margin-bottom: 2.5rem;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .page-header-left h1 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700; color: var(--text-primary);
+    letter-spacing: -0.03em; line-height: 1.2;
+  }
+  .page-header-left p {
+    color: var(--text-secondary); font-size: 0.92rem; margin-top: 6px;
+  }
+  .progress-pill {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 30px; padding: 6px 16px;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: var(--shadow-sm);
+  }
+  .progress-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+  /* ── SECTION TITLES ── */
+  .section-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 1.1rem; margin-top: 2.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 1rem;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── SUBJECT CARD ── */
+  .subject-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.3rem 1rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 10px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .subject-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.22s ease;
+  }
+  .subject-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--card-accent, var(--accent));
+  }
+  .subject-card:hover::before { transform: scaleX(1); }
+  .subject-card.active {
+    border-color: var(--card-accent, var(--accent));
+    background: linear-gradient(135deg, var(--surface) 70%, var(--accent-light) 100%);
+    box-shadow: var(--shadow-md);
+  }
+  .subject-card.active::before { transform: scaleX(1); }
+
+  .subject-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    background: var(--icon-bg, var(--accent-light));
+  }
+  .subject-name {
+    font-size: 0.88rem; font-weight: 600; color: var(--text-primary);
+  }
+  .subject-count {
+    font-size: 0.72rem; color: var(--text-muted); font-weight: 400;
+  }
+
+  /* ── SPECIAL CARDS (Debug / Output) ── */
+  .special-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .special-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--card-color, var(--accent));
+  }
+  .special-card-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+    background: var(--icon-bg);
+  }
+  .special-card-text { flex: 1; }
+  .special-card-title {
+    font-size: 0.97rem; font-weight: 600; color: var(--text-primary);
+  }
+  .special-card-sub {
+    font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;
+  }
+  .special-card-arrow {
+    color: var(--text-muted); font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+  .special-card:hover .special-card-arrow { transform: translateX(3px); }
+
+  /* ── CONTENT PANEL ── */
+  .content-panel {
+    display: none;
+    animation: slideIn 0.25s ease;
+  }
+  .content-panel.visible { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.8rem;
+  }
+  .panel-title-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    background: var(--accent-light);
+  }
+  .panel-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); }
+  .close-btn {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 14px;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.18s;
+    font-family: 'Sora', sans-serif;
+  }
+  .close-btn:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  /* ── Q&A CARDS ── */
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .qa-card:hover { box-shadow: var(--shadow-md); }
+
+  .qa-question {
+    padding: 1.1rem 1.25rem;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 1rem; cursor: pointer;
+  }
+  .qa-q-number {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: var(--accent-light); color: var(--accent);
+    font-size: 0.72rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .qa-q-text {
+    flex: 1; font-size: 0.9rem; font-weight: 500;
+    color: var(--text-primary); padding-top: 2px;
+  }
+  .show-btn {
+    background: var(--accent-light); border: none;
+    color: var(--accent); font-size: 0.78rem; font-weight: 600;
+    padding: 6px 14px; border-radius: 7px; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0;
+    transition: all 0.18s; font-family: 'Sora', sans-serif;
+  }
+  .show-btn:hover { background: var(--accent); color: #fff; }
+  .show-btn.active { background: var(--accent); color: #fff; }
+
+  .qa-answer {
+    display: none;
+    padding: 1rem 1.25rem 1.2rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface-2);
+    animation: fadeIn 0.2s ease;
+  }
+  .qa-answer.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .qa-answer p {
+    font-size: 0.87rem; color: var(--text-secondary); line-height: 1.7;
+  }
+  .qa-answer-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--green);
+    margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+  }
+  .qa-answer-label::before {
+    content: '✓'; width: 16px; height: 16px; background: var(--green-light);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+  }
+
+  /* ── CODE CARDS ── */
+  .code-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .code-card:hover { box-shadow: var(--shadow-md); }
+
+  .code-card-header {
+    padding: 1.1rem 1.25rem 0.9rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .code-card-title {
+    font-size: 0.92rem; font-weight: 600; color: var(--text-primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lang-badge {
+    font-size: 0.68rem; font-weight: 600; padding: 2px 8px;
+    border-radius: 5px; background: var(--accent-light); color: var(--accent);
+  }
+
+  .code-block-wrapper {
+    margin: 0 1.25rem 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #2d3748;
+  }
+  .code-block-bar {
+    background: #1e2433;
+    padding: 7px 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green { background: #28c840; }
+  .code-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: #718096; margin-left: 6px;
+  }
+  pre {
+    background: #1a1f2e;
+    padding: 1rem 1.25rem;
+    overflow-x: auto; margin: 0;
+  }
+  pre code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem; color: #e2e8f0; line-height: 1.7;
+  }
+  .kw { color: #7ee8fa; }
+  .fn { color: #ffd700; }
+  .str { color: #9ae6b4; }
+  .cm { color: #718096; font-style: italic; }
+  .num { color: #f6ad55; }
+  .tp { color: #fc8181; }
+
+  .code-card-footer {
+    padding: 0.8rem 1.25rem 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+  .hint-text { font-size: 0.78rem; color: var(--text-muted); }
+
+  .solution-reveal {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: var(--surface-2);
+    animation: fadeIn 0.2s ease;
+  }
+  .solution-reveal.visible { display: block; }
+  .solution-section { padding: 1rem 1.25rem; }
+  .solution-section + .solution-section { border-top: 1px dashed var(--border); }
+  .solution-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .solution-label.error { color: var(--red); }
+  .solution-label.correct { color: var(--green); }
+  .solution-label.output { color: var(--purple); }
+  .solution-label.explain { color: var(--teal); }
+
+  .error-box {
+    background: var(--red-light); border: 1px solid #fca5a5;
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 0.83rem; color: #b91c1c; line-height: 1.6;
+  }
+  .output-box {
+    background: var(--purple-light); border: 1px solid #c4b5fd;
+    border-radius: 8px; padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem; color: var(--purple); line-height: 1.7;
+  }
+  .explain-box {
+    font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.18s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-orange {
+    background: var(--orange-light); color: var(--orange);
+  }
+  .btn-orange:hover, .btn-orange.active {
+    background: var(--orange); color: #fff;
+  }
+  .btn-purple {
+    background: var(--purple-light); color: var(--purple);
+  }
+  .btn-purple:hover, .btn-purple.active {
+    background: var(--purple); color: #fff;
+  }
+
+  /* ── EMPTY / BACK STATES ── */
+  .back-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .back-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 14px 6px 10px;
+    font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+    transition: all 0.18s; font-family: 'Sora', sans-serif;
+  }
+  .back-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    main { padding: 1.25rem 1rem 3rem; }
+    .subjects-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .subject-card { padding: 1rem 0.75rem; }
+    .subject-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+    .subject-name { font-size: 0.8rem; }
+    nav { padding: 0 1rem; }
+    .breadcrumb-bar { padding: 0.5rem 1rem; }
+  }
+  @media (max-width: 400px) {
+    .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="9" fill="#4f6ef7"/>
+        <path d="M9 12l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 20h7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      LearnLab
+    </a>
+    <span class="nav-badge">BETA</span>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="breadcrumb" id="breadcrumb">
+    <a href="#" onclick="goHome()">Home</a>
+    <span class="sep">›</span>
+    <span class="current" id="breadcrumb-current">Technical Interview</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HOME VIEW -->
+  <div id="view-home">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Technical Interview Questions</h1>
+        <p>Master your concepts with curated questions &amp; detailed answers</p>
+      </div>
+      <div class="progress-pill">
+        <div class="progress-dot"></div>
+        10 Questions Ready
+      </div>
+    </div>
+
+    <!-- CORE SUBJECTS -->
+    <!-- CORE SUBJECTS -->
+<div class="section-label">Core Subjects</div>
+
+<div class="subjects-grid">
+
+<div class="subject-card"
+style="--card-accent:#4f6ef7;--icon-bg:#eef1fe;"
+onclick="openSubject('dbms')">
+
+<div class="subject-icon">🗄️</div>
+
+<div class="subject-name">DBMS</div>
+
+<div class="subject-count"
+id="count-dbms">
+0 questions
+</div>
+
+</div>
+
+
+<div class="subject-card"
+style="--card-accent:#22c55e;--icon-bg:#dcfce7;"
+onclick="openSubject('os')">
+
+<div class="subject-icon">⚙️</div>
+
+<div class="subject-name">
+Operating Systems
+</div>
+
+<div class="subject-count"
+id="count-os">
+0 questions
+</div>
+
+</div>
+
+
+<div class="subject-card"
+style="--card-accent:#8b5cf6;--icon-bg:#f5f3ff;"
+onclick="openSubject('oops')">
+
+<div class="subject-icon">🧩</div>
+
+<div class="subject-name">OOPs</div>
+
+<div class="subject-count"
+id="count-oops">
+0 questions
+</div>
+
+</div>
+
+
+<div class="subject-card"
+style="--card-accent:#0d9488;--icon-bg:#f0fdfa;"
+onclick="openSubject('sql')">
+
+<div class="subject-icon">📊</div>
+
+<div class="subject-name">SQL</div>
+
+<div class="subject-count"
+id="count-sql">
+0 questions
+</div>
+
+</div>
+
+
+<div class="subject-card"
+style="--card-accent:#f97316;--icon-bg:#fff7ed;"
+onclick="openSubject('java')">
+
+<div class="subject-icon">☕</div>
+
+<div class="subject-name">Java</div>
+
+<div class="subject-count"
+id="count-java">
+0 questions
+</div>
+
+</div>
+
+
+<div class="subject-card"
+style="--card-accent:#ef4444;--icon-bg:#fef2f2;"
+onclick="openSubject('cn')">
+
+<div class="subject-icon">🌐</div>
+
+<div class="subject-name">
+Computer Networks
+</div>
+
+<div class="subject-count"
+id="count-cn">
+0 questions
+</div>
+
+</div>
+
+</div>
+
+    <!-- SPECIAL SECTIONS -->
+    <div class="section-label">Practice Sections</div>
+    <div class="cards-grid">
+      <div class="special-card" style="--card-color:#f97316;" onclick="openSection('debug')">
+        <div class="special-card-icon" style="--icon-bg:#fff7ed;">🐛</div>
+        <div class="special-card-text">
+          <div class="special-card-title">Debugging Questions</div>
+          <div class="special-card-sub"
+id="count-debug">
+Loading...
+</div>
+        </div>
+        <div class="special-card-arrow">›</div>
+      </div>
+      <div class="special-card" style="--card-color:#8b5cf6;" onclick="openSection('output')">
+        <div class="special-card-icon" style="--icon-bg:#f5f3ff;">💡</div>
+        <div class="special-card-text">
+          <div class="special-card-title">Output-Based Questions</div>
+         <div class="special-card-sub"
+id="count-output">
+Loading...
+</div>
+        </div>
+        <div class="special-card-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT VIEW -->
+  <div id="view-subject" class="content-panel">
+    <div class="back-row">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <div class="panel-icon" id="subject-panel-icon"></div>
+        <div class="panel-title" id="subject-panel-title"></div>
+      </div>
+    </div>
+    <div id="subject-questions"></div>
+  </div>
+
+  <!-- DEBUG VIEW -->
+  <div id="view-debug" class="content-panel">
+    <div class="back-row">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <div class="panel-icon" style="background:#fff7ed; font-size:1.1rem;">🐛</div>
+        <div class="panel-title">Debugging Questions</div>
+      </div>
+    </div>
+    <div id="debug-questions"></div>
+  </div>
+
+  <!-- OUTPUT VIEW -->
+  <div id="view-output" class="content-panel">
+    <div class="back-row">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <div class="panel-icon" style="background:#f5f3ff; font-size:1.1rem;">💡</div>
+        <div class="panel-title">Output-Based Questions</div>
+      </div>
+    </div>
+    <div id="output-questions"></div>
+  </div>
+
+</main>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+
+
+// ── STATE & NAVIGATION ────────────────────────────────────────────────────────
+
+// ── STATE & NAVIGATION ─────────────────────────────
+
+let currentView = 'home';
+
+function showView(id) {
+
+document.getElementById('view-home').classList.remove('visible');
+document.getElementById('view-subject').classList.remove('visible');
+document.getElementById('view-debug').classList.remove('visible');
+document.getElementById('view-output').classList.remove('visible');
+
+document.getElementById('view-' + id)
+.classList.add('visible');
+
+currentView = id;
+
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+
+}
+
+function goHome() {
+
+setBreadcrumb(
+'Technical Interview',
+null
+);
+
+showView('home');
+
+}
+
+function goBack() {
+
+goHome();
+
+}
+
+function setBreadcrumb(current, sub) {
+
+const el =
+document.getElementById('breadcrumb');
+
+const cur =
+document.getElementById('breadcrumb-current');
+
+if (sub) {
+
+cur.textContent = current;
+
+let existing =
+el.querySelector('.crumb-sub');
+
+if (!existing) {
+
+const sep =
+document.createElement('span');
+
+sep.className = 'sep';
+sep.textContent = '›';
+
+const span =
+document.createElement('span');
+
+span.className =
+'current crumb-sub';
+
+span.textContent = sub;
+
+el.appendChild(sep);
+el.appendChild(span);
+
+}
+
+else {
+
+existing.textContent = sub;
+
+}
+
+}
+
+else {
+
+cur.textContent = current;
+
+const existing =
+el.querySelector('.crumb-sub');
+
+const seps =
+el.querySelectorAll('.sep');
+
+if (existing) existing.remove();
+
+if (seps.length > 1)
+seps[1].remove();
+
+}
+
+}
+
+
+
+// ── SUBJECT QUESTIONS ─────────────────────────────
+
+function openSubject(key){
+
+const subjectMap = {
+
+dbms: "DBMS",
+os: "Operating Systems",
+oops: "OOPs",
+sql: "SQL",
+java: "Java",
+cn: "Computer Networks"
+
+};
+
+const iconMap = {
+
+dbms: "🗄️",
+os: "⚙️",
+oops: "🧩",
+sql: "📊",
+java: "☕",
+cn: "🌐"
+
+};
+
+let subjectName =
+subjectMap[key];
+
+fetch(
+"get_questions.php?subject="
++ subjectName
+)
+
+.then(response =>
+response.json()
+)
+
+.then(data => {
+
+let html = "";
+
+data.forEach((q,i)=>{
+
+let id =
+key + "_q" + i;
+
+html += `
+
+<div class="qa-card">
+
+<div class="qa-question"
+onclick="toggleAnswer('${id}')">
+
+<div class="qa-q-number">
+Q${i+1}
+</div>
+
+<div class="qa-q-text">
+${q.q}
+</div>
+
+<button class="show-btn"
+id="btn_${id}">
+
+Show Answer
+
+</button>
+
+</div>
+
+<div class="qa-answer"
+id="${id}">
+
+<div class="qa-answer-label">
+Answer
+</div>
+
+<p>
+${q.a}
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"subject-questions"
+).innerHTML = html;
+
+document.getElementById(
+"subject-panel-title"
+).textContent = subjectName;
+
+document.getElementById(
+"subject-panel-icon"
+).textContent =
+iconMap[key];
+
+setBreadcrumb(
+"Technical Interview",
+subjectName
+);
+
+showView("subject");
+
+})
+
+.catch(error => {
+
+console.error(
+"Subject Fetch Error:",
+error
+);
+
+});
+
+}
+
+
+
+// ── DEBUG & OUTPUT ─────────────────────────────
+
+function openSection(type){
+
+/* DEBUG */
+
+if(type === "debug"){
+
+fetch("get_debug_questions.php")
+
+.then(response =>
+response.json()
+)
+
+.then(debugQuestions => {
+
+let html = "";
+
+debugQuestions.forEach((q,i)=>{
+
+let id =
+"debug_" + i;
+
+html += `
+
+<div class="code-card">
+
+<div class="code-card-header">
+
+<div class="code-card-title">
+${q.title}
+</div>
+
+</div>
+
+<div class="code-block-wrapper">
+
+<pre><code>
+${q.code}
+</code></pre>
+
+</div>
+
+<div class="code-card-footer">
+
+<button
+class="btn btn-orange"
+id="btn_${id}"
+onclick="toggleSolution('${id}')">
+
+Show Solution
+
+</button>
+
+</div>
+
+<div class="solution-reveal"
+id="${id}">
+
+<div class="solution-section">
+
+<div class="solution-label error">
+⚠ Error Description
+</div>
+
+<div class="error-box">
+${q.error}
+</div>
+
+</div>
+
+<div class="solution-section">
+
+<div class="solution-label correct">
+✓ Correct Solution
+</div>
+
+<pre><code>
+${q.fix}
+</code></pre>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"debug-questions"
+).innerHTML = html;
+
+setBreadcrumb(
+"Technical Interview",
+"Debugging"
+);
+
+showView("debug");
+
+});
+
+}
+
+
+
+/* OUTPUT */
+
+else if(type === "output"){
+
+fetch("get_output_questions.php")
+
+.then(response =>
+response.json()
+)
+
+.then(outputQuestions => {
+
+let html = "";
+
+outputQuestions.forEach((q,i)=>{
+
+let id =
+"output_" + i;
+
+html += `
+
+<div class="code-card">
+
+<div class="code-card-header">
+
+<div class="code-card-title">
+${q.title}
+</div>
+
+</div>
+
+<div class="code-block-wrapper">
+
+<pre><code>
+${q.code}
+</code></pre>
+
+</div>
+
+<div class="code-card-footer">
+
+<button
+class="btn btn-purple"
+id="btn_${id}"
+onclick="toggleOutput('${id}')">
+
+Show Output
+
+</button>
+
+</div>
+
+<div class="solution-reveal"
+id="${id}">
+
+<div class="solution-section">
+
+<div class="solution-label output">
+▶ Output
+</div>
+
+<div class="output-box">
+
+<pre><code>
+${q.output}
+</code></pre>
+
+</div>
+
+</div>
+
+<div class="solution-section">
+
+<div class="solution-label explain">
+📖 Explanation
+</div>
+
+<div class="explain-box">
+${q.explanation}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"output-questions"
+).innerHTML = html;
+
+setBreadcrumb(
+"Technical Interview",
+"Output-Based"
+);
+
+showView("output");
+
+});
+
+}
+
+}
+
+
+
+// ── TOGGLES ─────────────────────────────
+
+function toggleAnswer(id){
+
+const el =
+document.getElementById(id);
+
+const btn =
+document.getElementById(
+"btn_"+id
+);
+
+const visible =
+el.classList.contains(
+"visible"
+);
+
+el.classList.toggle(
+"visible"
+);
+
+btn.textContent =
+visible
+? "Show Answer"
+: "Hide Answer";
+
+}
+
+
+
+function toggleSolution(id){
+
+const el =
+document.getElementById(id);
+
+const btn =
+document.getElementById(
+"btn_"+id
+);
+
+const visible =
+el.classList.contains(
+"visible"
+);
+
+el.classList.toggle(
+"visible"
+);
+
+btn.textContent =
+visible
+? "Show Solution"
+: "Hide Solution";
+
+}
+
+
+
+function toggleOutput(id){
+
+const el =
+document.getElementById(id);
+
+const btn =
+document.getElementById(
+"btn_"+id
+);
+
+const visible =
+el.classList.contains(
+"visible"
+);
+
+el.classList.toggle(
+"visible"
+);
+
+btn.textContent =
+visible
+? "Show Output"
+: "Hide Output";
+
+}
+
+
+
+// ── LOAD SUBJECT COUNTS ─────────────────────────────
+
+function loadCounts(){
+
+fetch("get_counts.php")
+
+.then(response => response.json())
+
+.then(data => {
+
+/* SUBJECT COUNTS */
+
+const subjectMap = {
+
+"DBMS":"count-dbms",
+"Operating Systems":"count-os",
+"OOPs":"count-oops",
+"SQL":"count-sql",
+"Java":"count-java",
+"Computer Networks":"count-cn"
+
+};
+
+for(let subject in data.subjects){
+
+let elementId =
+subjectMap[subject];
+
+if(elementId){
+
+document.getElementById(
+elementId
+).textContent =
+data.subjects[subject]
++ " questions";
+
+}
+
+}
+
+
+/* DEBUG COUNT */
+
+document.getElementById(
+"count-debug"
+).textContent =
+"Find & fix bugs — "
++ data.debug
++ " problems";
+
+
+/* OUTPUT COUNT */
+
+document.getElementById(
+"count-output"
+).textContent =
+"Predict output — "
++ data.output
++ " problems";
+
+})
+
+.catch(error => {
+
+console.error(
+"Count Load Error:",
+error
+);
+
+});
+
+}
+
+
+// ── INIT ─────────────────────────────
+
+showView('home');
+loadCounts();
+</script>
+
+</body>
+</html>
