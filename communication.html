@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Communication Skills Practice Module</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="globalstyle.css" />
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">Placement Preparation · Communication Skills</div>
+  <h1>Speak With Confidence</h1>
+  <p>A complete practice module to master interviews, networking, and professional communication — built for freshers.</p>
+</header>
+
+<!-- NAV -->
+<nav class="nav-pills" id="navPills">
+  <button class="nav-pill active" onclick="scrollTo('s1')">✦ Introduction</button>
+  <button class="nav-pill" onclick="scrollTo('s2')">✦ Questions</button>
+  <button class="nav-pill" onclick="scrollTo('s3')">✦ Tips & Answers</button>
+  <button class="nav-pill" onclick="scrollTo('s4')">✦ Comm Tips</button>
+</nav>
+
+<main>
+
+  <!-- ══ SECTION 1 ══ -->
+  <section class="section-card" id="s1">
+    <div class="section-number">Section 01</div>
+    <div class="section-title">Introduction Generator</div>
+    <p class="section-desc">Fill in your details and generate a polished self-introduction for any occasion — formal interview, quick pitch, or casual networking.</p>
+
+    <div class="streak-bar">
+      <strong>Tip:</strong> Use all three styles and practice saying each one aloud.
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="f-name" placeholder="e.g. Priya Sharma">
+      </div>
+      <div class="form-group">
+        <label>Degree</label>
+        <input type="text" id="f-degree" placeholder="e.g. B.Tech CSE">
+      </div>
+      <div class="form-group">
+        <label>College Name</label>
+        <input type="text" id="f-college" placeholder="e.g. VIT University">
+      </div>
+      <div class="form-group">
+        <label>Career Goal</label>
+        <input type="text" id="f-goal" placeholder="e.g. Software Engineer at a top MNC">
+      </div>
+      <div class="form-group full">
+        <label>Skills <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(comma separated)</span></label>
+        <input type="text" id="f-skills" placeholder="e.g. Python, Machine Learning, Data Analysis">
+      </div>
+      <div class="form-group full">
+        <label>Interests</label>
+        <input type="text" id="f-interests" placeholder="e.g. AI research, open-source contributions, problem solving">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="generateIntro('formal')">📋 Formal Interview</button>
+      <button class="btn btn-teal" onclick="generateIntro('short')">⚡ 30-Second Pitch</button>
+      <button class="btn btn-lavender" onclick="generateIntro('casual')">🤝 Casual Networking</button>
+      <button class="btn btn-ghost" onclick="clearIntroForm()">✕ Clear</button>
+    </div>
+
+    <div class="output-card" id="introOutput">
+      <div class="output-label"><span></span> <span id="introLabel">Introduction</span></div>
+      <div id="introText"></div>
+      <button class="copy-btn" onclick="copyText('introText')">Copy</button>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 2 ══ -->
+  <section class="section-card" id="s2">
+    <div class="section-number">Section 02</div>
+    <div class="section-title">Random Practice Questions</div>
+    <p class="section-desc">Click the button to receive a random interview question. Practice your answer before revealing the expert tips and sample response below.</p>
+
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="showRandomQuestion()">🎲 Show Random Question</button>
+      <button class="btn btn-ghost" onclick="hideQuestion()">✕ Hide</button>
+    </div>
+
+    <div class="question-display" id="questionDisplay">
+      <div class="q-badge" id="qBadge">Question</div>
+      <div class="q-text" id="qText"></div>
+
+      <hr class="divider">
+
+      <div class="tips-block">
+        <div class="block-label">💡 Answer Tips</div>
+        <ul id="qTipsList"></ul>
+      </div>
+
+      <div class="answer-block" style="margin-top:14px">
+        <div class="block-label">🎤 Sample Answer</div>
+        <div class="answer-text" id="qSample"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 3 ══ -->
+  <section class="section-card" id="s3">
+    <div class="section-number">Section 03 &amp; 04</div>
+    <div class="section-title">Browse All Questions</div>
+    <p class="section-desc">Select any question from the list to instantly view curated answer tips and a professional sample answer tailored for freshers.</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px" id="allQBtns"></div>
+
+    <div class="question-display" id="browseDisplay" style="display:none">
+      <div class="q-badge">Selected Question</div>
+      <div class="q-text" id="browseQText"></div>
+      <hr class="divider">
+      <div class="tips-block">
+        <div class="block-label">💡 Answer Tips</div>
+        <ul id="browseTipsList"></ul>
+      </div>
+      <div class="answer-block" style="margin-top:14px">
+        <div class="block-label">🎤 Sample Answer</div>
+        <div class="answer-text" id="browseSample"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 4 (Comm Tips) ══ -->
+  <section class="section-card" id="s4">
+    <div class="section-number">Section 05</div>
+    <div class="section-title">Communication Tips</div>
+    <p class="section-desc">Quick, actionable tips to sharpen your on-the-spot communication and make a lasting impression.</p>
+
+    <div class="btn-row">
+      <button class="btn btn-rose" onclick="showCommTip()">✨ Show Communication Tip</button>
+    </div>
+
+    <div class="tip-display" id="tipDisplay">
+      <div class="tip-icon" id="tipIcon">💬</div>
+      <div class="tip-text" id="tipText"></div>
+      <div class="tip-counter" id="tipCounter"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Made with <span>♥</span> for placement preparation &nbsp;·&nbsp; Communication Skills Practice Module</footer>
+
+<script>
+// ════════════════════════════════════════════
+//  DATA
+// ════════════════════════════════════════════
+
+const questions = [
+  "Tell me about yourself.",
+  "What are your strengths?",
+  "What are your weaknesses?",
+  "Why should we hire you?",
+  "Describe a challenge you faced and how you overcame it.",
+  "Where do you see yourself in 5 years?",
+  "How do you handle pressure and stressful situations?",
+  "Describe a teamwork experience.",
+  "How do you manage your time effectively?",
+  "What motivates you?",
+  "Tell me about a failure and what you learned from it.",
+  "How do you handle conflict with a colleague or teammate?",
+  "What is your greatest achievement so far?",
+  "Describe your leadership skills with an example.",
+  "How do you learn new skills quickly?",
+  "How do you prioritize tasks when everything feels urgent?",
+  "What makes you unique compared to other candidates?",
+  "Describe a difficult situation you handled professionally.",
+  "How do you handle criticism or negative feedback?",
+  "Why did you choose your field of study?"
+];
+
+const tips = {
+  0: ["Start with a brief personal introduction", "Mention your educational background clearly", "Highlight 2–3 relevant technical skills", "Briefly describe a project or achievement", "End by stating your career goal confidently"],
+  1: ["Choose 2–3 strengths relevant to the job", "Back each strength with a real example", "Keep your tone confident but not boastful", "Relate strengths to value you'll add to the team"],
+  2: ["Be honest but strategic — pick a real weakness", "Immediately explain what steps you're taking to improve", "Avoid clichés like 'I work too hard'", "Show self-awareness and a growth mindset"],
+  3: ["Start with what you can contribute technically", "Mention your willingness to learn and adapt quickly", "Include a specific example of past performance", "End with enthusiasm for the role and company"],
+  4: ["Use the STAR method: Situation, Task, Action, Result", "Choose a relevant academic or project challenge", "Focus on what YOU specifically did", "Emphasize the positive outcome or lesson learned"],
+  5: ["Talk about realistic short-term and long-term goals", "Align your goal with the company's growth direction", "Show ambition while remaining grounded", "Mention skill development along the path"],
+  6: ["Describe a specific method you use (e.g. to-do lists, breathing)", "Give a real example where pressure led to good results", "Avoid saying 'I don't get stressed'", "Show emotional intelligence and self-regulation"],
+  7: ["Mention your role clearly in the team setting", "Describe how you collaborated and communicated", "Include how conflict (if any) was resolved", "Highlight the final outcome of the team effort"],
+  8: ["Mention a specific method (time-blocking, prioritization matrix)", "Give an example from academics or internship", "Show how you balance multiple deadlines", "Include tools or habits you use (calendar, task apps)"],
+  9: ["Share what genuinely motivates you — be authentic", "Relate your motivation to the field or role", "Give an example of a time your motivation drove results", "Keep the answer positive and forward-looking"],
+  10: ["Pick a failure that was real but not catastrophic", "Use the STAR method to structure your answer", "Focus 70% on what you learned and changed", "End on a positive note showing growth"],
+  11: ["Describe the conflict briefly without blame", "Explain how you initiated a calm conversation", "Focus on the resolution and compromise", "Mention what you learned about communication"],
+  12: ["Choose an achievement relevant to the role if possible", "Describe what you did specifically", "Quantify the result if possible (e.g. 'improved by 30%')", "Mention what it taught you about yourself"],
+  13: ["Use a real example of leading a team or project", "Describe how you delegated and motivated others", "Mention challenges and how you navigated them", "Show both decisiveness and empathy"],
+  14: ["Describe a specific strategy you use to learn", "Give an example of a skill you picked up quickly", "Mention resources you prefer (courses, mentors, practice)", "Show initiative and curiosity"],
+  15: ["Mention a framework (urgency vs importance matrix)", "Give an example of a situation with competing deadlines", "Show how you communicate with stakeholders about priorities", "Emphasize flexibility and logical decision-making"],
+  16: ["Identify a genuinely differentiating trait or experience", "Back it with a concrete story or example", "Relate it to what the company/role needs", "Stay confident without undermining others"],
+  17: ["Choose a professionally challenging situation", "Use the STAR method to walk through it", "Emphasize your calm, logical approach", "Highlight the outcome and any lessons learned"],
+  18: ["Show that you welcome feedback as a growth tool", "Give an example where feedback improved your work", "Avoid defensiveness in your tone and language", "Mention how you implemented the feedback received"],
+  19: ["Explain what drew you to the subject early on", "Mention a specific moment, mentor, or project that solidified your choice", "Connect your field to your career aspirations", "Express genuine enthusiasm for the discipline"]
+};
+
+const sampleAnswers = {
+  0: `My name is [Name] and I am currently pursuing [Degree] at [College]. During my academic journey, I have developed strong skills in areas like problem-solving, programming, and project management. I have worked on several team projects that gave me hands-on experience with real-world challenges. I am deeply passionate about technology and its potential to create meaningful impact. My goal is to contribute to an innovative organization where I can grow professionally and make a difference.`,
+  1: `I consider my greatest strengths to be adaptability and strong analytical thinking. During group projects at college, I was often the one who quickly understood new requirements and restructured our approach accordingly. For instance, when our team faced an unexpected change in project scope, I broke down the problem, reassigned tasks, and we delivered on time. I also believe I am a strong communicator, which helps me collaborate effectively with diverse teams.`,
+  2: `One area I am actively working to improve is public speaking. In the past, I would feel nervous presenting in front of large groups, which affected the clarity of my delivery. Recognizing this, I joined my college's debate club and participated in several seminars to build my confidence. I have noticed significant improvement over the past few months and I continue to practice regularly. I believe turning this weakness into a strength is already making me a more well-rounded professional.`,
+  3: `You should hire me because I bring a combination of strong technical skills, a collaborative mindset, and a genuine passion for this field. During my academics, I consistently delivered quality work within tight deadlines while supporting my teammates. I am a quick learner who adapts well to new technologies and work environments. I am also highly motivated to contribute to your organization's goals and grow alongside the team. I believe my attitude and skills make me a reliable and valuable addition.`,
+  4: `During my final-year project, our team encountered a critical bug just two days before the submission deadline. The challenge was identifying the root cause quickly without disrupting the rest of the codebase. I took the initiative to systematically debug the code, documented each step, and stayed late to resolve the issue. With support from my teammates, we fixed the problem and submitted on time. This experience taught me the importance of composure, structured thinking, and teamwork under pressure.`,
+  5: `In five years, I see myself having grown into a confident professional with expertise in my chosen domain. I hope to take on responsibilities that involve not only technical problem-solving but also mentoring junior colleagues. I aim to be in a role where I contribute meaningfully to the organization's strategic goals. I also plan to continually upskill through certifications and real-world projects. My long-term vision is to be a well-rounded leader in my field.`,
+  6: `I handle pressure by staying organized and focusing on what I can control at any given moment. When I have multiple deadlines approaching, I create a priority list and break larger tasks into smaller, manageable steps. During my semester exams, I managed project submissions alongside examinations by planning my time a week in advance. I also make sure to take short breaks to maintain my focus and avoid burnout. This approach helps me stay calm and deliver quality work consistently.`,
+  7: `During my second year, I worked with a team of five to build a college management application as part of our curriculum project. My role was to handle the backend logic and coordinate with the front-end developers. We held regular sync-up meetings to ensure everyone was aligned and addressed issues early. When disagreements arose, we discussed them openly and reached a consensus as a team. We completed the project ahead of schedule and received excellent feedback from our faculty.`,
+  8: `I manage my time by planning my week every Sunday and setting daily goals each morning. I use a simple task list where I mark tasks as urgent, important, or routine, and I tackle high-priority ones first. During my college days, I successfully balanced coursework, project work, and club activities using this approach. I also set personal deadlines ahead of actual deadlines to create a buffer for review. This habit has helped me consistently deliver quality work without last-minute stress.`,
+  9: `I am motivated by the desire to solve real-world problems through technology. Whenever I successfully debug a complex issue or build a feature that improves user experience, it gives me immense satisfaction. I am also motivated by learning — discovering new tools, frameworks, and methods keeps me engaged and excited. Additionally, working within a team and seeing everyone's efforts come together to achieve a common goal drives me forward. This combination of curiosity, purpose, and collaboration fuels my enthusiasm every day.`,
+  10: `In my third year, I led a small team for a hackathon project, and due to a miscommunication in our planning, our final submission had a major feature missing. We did not qualify for the top results, and I took that hard. However, I used it as a learning experience to understand the importance of clear communication, role definition, and testing early. I restructured how I approach projects since then, with dedicated checkpoints and clearer task assignments. That failure ultimately made me a better planner and team leader.`,
+  11: `During a group project, a teammate and I had different opinions on the architecture of our application. Rather than letting it become a source of tension, I requested a one-on-one conversation to understand their perspective fully. I explained my reasoning clearly and we evaluated both approaches objectively based on time, scalability, and our team's skill set. We decided to combine the best elements of both ideas, which resulted in a more robust solution. This experience reinforced my belief that open and respectful communication resolves most conflicts.`,
+  12: `My greatest achievement so far has been developing a web application for my college's annual cultural festival that was used by over 800 students for event registration. I designed, built, and deployed the application within three weeks, learning new technologies along the way. The system reduced manual registration errors significantly and was appreciated by both students and faculty. This project gave me confidence in my ability to deliver under real-world constraints. It also taught me the value of taking initiative and following through on commitments.`,
+  13: `In my college's technical club, I was elected as the project coordinator for our flagship event. I organized a team of twelve members, divided responsibilities based on individual strengths, and set clear weekly milestones. When members faced blockers, I stepped in to support and re-allocate tasks to keep momentum going. I also made sure to keep communication open and motivate the team during stressful phases. The event was a great success with over 200 participants, and it gave me my first real experience of team leadership.`,
+  14: `I learn new skills by starting with the fundamentals and then immediately applying what I learn to a hands-on project. For example, when I decided to learn data visualization, I started with documentation and short tutorials, then built a small dashboard using real datasets within a week. I also believe in seeking feedback from peers or mentors to identify gaps in my understanding. Additionally, I follow industry blogs and communities to stay updated on best practices. This active learning approach has helped me pick up new tools quickly and confidently.`,
+  15: `When faced with multiple urgent tasks, I first list everything out and categorize them by impact and deadline. I then identify which tasks are truly time-sensitive versus those that can be slightly deferred without consequences. During a busy academic period, I had three project submissions and two exams within the same week. I created a detailed hour-by-hour schedule, communicated the situation to my project teammates, and ensured we all worked efficiently toward shared deadlines. By staying organized and communicating proactively, I managed to complete everything without compromising quality.`,
+  16: `What makes me unique is a combination of technical ability and strong interpersonal skills. While many candidates may share similar academic backgrounds, I have consistently sought opportunities to apply my learning in practical settings — from hackathons to college events to personal projects. I am also genuinely curious, which drives me to explore problems beyond surface-level solutions. I adapt quickly to new environments and take initiative without needing to be asked. I believe this proactive and well-rounded approach sets me apart as a candidate.`,
+  17: `During my internship, I was assigned a critical bug fix in a module I had never worked in before, with a one-day turnaround expected. I stayed calm, read through the existing code carefully, documented what I understood, and asked targeted questions to my senior colleague. I identified the issue within a few hours, wrote a fix, and thoroughly tested it before submitting. The fix was approved with minor changes, and my supervisor appreciated both the quality and speed of my work. This situation taught me to approach unknown territory with structure and confidence rather than anxiety.`,
+  18: `I genuinely value criticism because it gives me a perspective I might not have on my own work. When a professor gave me critical feedback on my project report, stating that my analysis lacked depth, I did not take it personally. Instead, I requested a meeting to understand exactly what was expected and revised the report with a more thorough analysis. The revised version received a much higher evaluation. Since then, I actively seek feedback at the end of every project to ensure I continuously improve.`,
+  19: `I chose Computer Science because I have always been fascinated by how software can simplify complex problems and reach millions of people. In school, I discovered programming when I built a simple calculator application, and the satisfaction of seeing logic turn into a working tool was unlike anything else. As I explored further, I found that technology intersects with almost every domain — healthcare, education, finance — which makes this field limitless. My college experiences have deepened that passion, and I am more committed than ever to building a career in software development.`
+};
+
+const commTips = [
+  { icon: "👁️", text: "Maintain comfortable eye contact to signal confidence and engagement." },
+  { icon: "🗣️", text: "Speak clearly and enunciate each word — clarity is more persuasive than speed." },
+  { icon: "🚫", text: "Avoid filler words like 'um', 'uh', or 'like' — they undermine your authority." },
+  { icon: "📖", text: "Use simple, direct language. Complexity does not equal intelligence." },
+  { icon: "👂", text: "Listen actively — nod, maintain eye contact, and resist the urge to interrupt." },
+  { icon: "🧍", text: "Maintain an upright, open posture — it projects authority and openness." },
+  { icon: "😊", text: "Smile genuinely and naturally — warmth builds instant rapport with your audience." },
+  { icon: "💭", text: "Pause to think before answering. Silence is powerful, not awkward." },
+  { icon: "💪", text: "Stay confident even when you don't know the exact answer — show your thinking." },
+  { icon: "🔄", text: "Practice your answers aloud daily — fluency only comes from repetition." },
+  { icon: "📌", text: "Prepare specific examples for every answer — stories are 22× more memorable than facts." },
+  { icon: "🤝", text: "Always be polite and respectful, even in disagreements — it reflects emotional maturity." },
+  { icon: "⏱️", text: "Control your speaking speed — slow down during key points for maximum impact." },
+  { icon: "🌊", text: "Stay calm under pressure by breathing deeply and focusing on one sentence at a time." },
+  { icon: "✨", text: "Use positive, open body language — uncross arms, face the listener, and lean in slightly." },
+  { icon: "🎯", text: "Answer the actual question asked — going off-topic signals poor listening skills." },
+  { icon: "📝", text: "Structure your answers: Situation → Action → Result. It keeps your response crisp and complete." },
+];
+
+// ════════════════════════════════════════════
+//  SECTION 1 — Introduction Generator
+// ════════════════════════════════════════════
+
+function getFormData() {
+  return {
+    name: document.getElementById('f-name').value.trim() || 'Alex',
+    degree: document.getElementById('f-degree').value.trim() || 'Bachelor of Technology',
+    college: document.getElementById('f-college').value.trim() || 'my college',
+    skills: document.getElementById('f-skills').value.trim() || 'programming and problem-solving',
+    interests: document.getElementById('f-interests').value.trim() || 'technology and innovation',
+    goal: document.getElementById('f-goal').value.trim() || 'a skilled software professional'
+  };
+}
+
+function generateIntro(style) {
+  const d = getFormData();
+  let text = '';
+  let label = '';
+
+  if (style === 'formal') {
+    label = '📋 Formal Interview Introduction';
+    text = `Good morning. My name is ${d.name} and I am currently pursuing ${d.degree} at ${d.college}. Throughout my academic journey, I have developed a strong foundation in ${d.skills}. I am particularly interested in ${d.interests}, which has shaped both my coursework and personal projects. My long-term career goal is to become ${d.goal}. I am eager to apply my skills, learn continuously, and contribute meaningfully to a dynamic organization.`;
+  } else if (style === 'short') {
+    label = '⚡ 30-Second Introduction';
+    text = `Hi, I'm ${d.name} — a ${d.degree} student from ${d.college}, skilled in ${d.skills}. I'm passionate about ${d.interests} and actively working toward becoming ${d.goal}. I'd love to connect and explore how I can add value to your team.`;
+  } else {
+    label = '🤝 Casual Networking Introduction';
+    text = `Hey! I'm ${d.name}, a ${d.degree} student from ${d.college}. I really enjoy working with ${d.skills} — it's something I've been building on throughout college. Outside of academics, I'm genuinely passionate about ${d.interests}. Right now, I'm working toward becoming ${d.goal}. Always happy to connect with like-minded people!`;
+  }
+
+  document.getElementById('introLabel').textContent = label;
+  document.getElementById('introText').textContent = text;
+  const out = document.getElementById('introOutput');
+  out.classList.remove('visible');
+  void out.offsetWidth;
+  out.classList.add('visible');
+}
+
+function clearIntroForm() {
+  ['f-name','f-degree','f-college','f-skills','f-interests','f-goal'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  const out = document.getElementById('introOutput');
+  out.classList.remove('visible');
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+
+    btn.textContent = "Copied!";
+
+    setTimeout(() => {
+      btn.textContent = "Copy";
+    }, 1500);
+  });
+}
+
+// ════════════════════════════════════════════
+//  SECTION 2 — Random Questions
+// ════════════════════════════════════════════
+
+let lastQIdx = -1;
+
+function showRandomQuestion() {
+  let idx;
+  do { idx = Math.floor(Math.random() * questions.length); } while (idx === lastQIdx);
+  lastQIdx = idx;
+
+  document.getElementById('qBadge').textContent = `Question ${idx + 1} of ${questions.length}`;
+  document.getElementById('qText').textContent = questions[idx];
+
+  // Tips
+  const ul = document.getElementById('qTipsList');
+  ul.innerHTML = '';
+  tips[idx].forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
+  });
+
+  // Sample
+  document.getElementById('qSample').textContent = sampleAnswers[idx];
+
+  const disp = document.getElementById('questionDisplay');
+  disp.classList.remove('visible');
+  void disp.offsetWidth;
+  disp.classList.add('visible');
+}
+
+function hideQuestion() {
+  document.getElementById('questionDisplay').classList.remove('visible');
+}
+
+// ════════════════════════════════════════════
+//  SECTION 3 — Browse All Questions
+// ════════════════════════════════════════════
+
+function buildBrowseButtons() {
+  const container = document.getElementById('allQBtns');
+  questions.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-ghost';
+    btn.style.cssText = 'font-size:.78rem;padding:7px 14px;border-radius:8px;';
+    btn.textContent = `Q${i + 1}`;
+    btn.title = q;
+    btn.onclick = () => showBrowseQuestion(i);
+    container.appendChild(btn);
+  });
+}
+
+function showBrowseQuestion(idx) {
+  document.getElementById('browseQText').textContent = questions[idx];
+
+  const ul = document.getElementById('browseTipsList');
+  ul.innerHTML = '';
+  tips[idx].forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
+  });
+
+  document.getElementById('browseSample').textContent = sampleAnswers[idx];
+
+  const disp = document.getElementById('browseDisplay');
+  disp.style.display = 'block';
+  disp.classList.remove('visible');
+  void disp.offsetWidth;
+  disp.classList.add('visible');
+  disp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Highlight active button
+  document.querySelectorAll('#allQBtns .btn').forEach((b, i) => {
+    b.classList.toggle('btn-gold', i === idx);
+    b.classList.toggle('btn-ghost', i !== idx);
+  });
+}
+
+// ════════════════════════════════════════════
+//  SECTION 4 — Communication Tips
+// ════════════════════════════════════════════
+
+let usedTips = [];
+
+function showCommTip() {
+  if (usedTips.length === commTips.length) usedTips = [];
+  let idx;
+  do { idx = Math.floor(Math.random() * commTips.length); } while (usedTips.includes(idx));
+  usedTips.push(idx);
+
+  const tip = commTips[idx];
+  document.getElementById('tipIcon').textContent = tip.icon;
+  document.getElementById('tipText').textContent = tip.text;
+  document.getElementById('tipCounter').textContent = `Tip ${usedTips.length} of ${commTips.length}`;
+
+  const disp = document.getElementById('tipDisplay');
+  disp.classList.remove('visible');
+  void disp.offsetWidth;
+  disp.classList.add('visible');
+}
+
+// ════════════════════════════════════════════
+//  SCROLL HELPER
+// ════════════════════════════════════════════
+
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+
+buildBrowseButtons();
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placement Guidance</title>
+ <link rel="stylesheet" href="globalstyle.css" />
+
+</head>
+
+<body>
+
+<a href="index.php" class="back">← Back to Home</a>
+
+<h1 class="page-title">Placement Guidance</h1>
+
+<!-- TOGGLE -->
+<div class="toggle">
+    <button id="techBtn" class="active" onclick="showTech()">Tech</button>
+    <button id="nonTechBtn" onclick="showNonTech()">Non-Tech</button>
+</div>
+
+<!-- TECH SECTION -->
+<section id="tech" class="cards">
+
+    <div class="card" onclick="location.href='codingpractice.html'">
+        <h2>💻 Coding Practice</h2>
+        <p>Master DSA, competitive programming & problem solving on platforms like LeetCode, HackerRank, CodeChef.</p>
+    </div>
+
+    <div class="card" onclick="location.href='aptitude.php'">
+        <h2>🧠 Aptitude Preparation</h2>
+        <p>Quantitative aptitude, logical reasoning & verbal ability for online assessments.</p>
+    </div>
+
+    <div class="card" onclick="location.href='technical_interview.html'">
+        <h2>💬 Technical Interview Questions</h2>
+        <p>Commonly asked questions in DBMS, OS, CN & OOPS.</p>
+    </div>
+
+  
+
+ 
+
+</section>
+
+<!-- NON TECH SECTION -->
+<section id="nontech" class="cards hidden">
+
+    <div class="card" onclick="location.href='resume.html'">
+        <h2>📄 Resume Preparation</h2>
+        <p>Build an ATS-friendly resume highlighting projects, internships & achievements.</p>
+    </div>
+
+    <div class="card"  onclick="location.href='communication.html'">
+        <h2>🎤 Communication Skills</h2>
+        <p>Improve spoken English, group discussion & presentation skills.</p>
+    </div>
+
+    <div class="card" onclick="location.href='interviewtips.html'">
+        <h2>💡 Interview Tips</h2>
+        <p>Body language, HR questions, salary negotiation & confidence building.</p>
+    </div>
+
+</section>
+
+<!-- SCRIPT -->
+<script>
+function showTech() {
+    document.getElementById("tech").classList.remove("hidden");
+    document.getElementById("nontech").classList.add("hidden");
+
+    document.getElementById("techBtn").classList.add("active");
+    document.getElementById("nonTechBtn").classList.remove("active");
+}
+
+function showNonTech() {
+    document.getElementById("nontech").classList.remove("hidden");
+    document.getElementById("tech").classList.add("hidden");
+
+    document.getElementById("nonTechBtn").classList.add("active");
+    document.getElementById("techBtn").classList.remove("active");
+}
+</script>
+
+</body>
+</html>

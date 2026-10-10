@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interview Tips</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="index.html">← Back to Home</a>
+    <h1>Interview Tips</h1>
+    <p>Prepare, practice, and succeed</p>
+  </header>
+
+  <div class="wrapper">
+
+    <!-- Section 1: Interview Checklist -->
+    <div class="section-label">Section 1</div>
+    <div class="card">
+      <h2>✅ Interview Preparation Checklist</h2>
+      <p style="color:var(--muted);font-size:0.93rem;margin-bottom:18px;">
+        Click each item to mark it as done. Track your readiness below!
+      </p>
+
+      <!-- Each <li> is clickable; JS toggles the "done" class -->
+      <ul class="checklist" id="checklist">
+        <li onclick="toggleCheck(this)">
+          <span class="box">✓</span>
+          Prepare your resume and keep a printed copy
+        </li>
+        <li onclick="toggleCheck(this)">
+          <span class="box">✓</span>
+          Revise core subjects and basics of your field
+        </li>
+        <li onclick="toggleCheck(this)">
+          <span class="box">✓</span>
+          Learn about the company — products, mission, values
+        </li>
+        <li onclick="toggleCheck(this)">
+          <span class="box">✓</span>
+          Practice coding problems and aptitude questions
+        </li>
+        <li onclick="toggleCheck(this)">
+          <span class="box">✓</span>
+          Dress formally and arrive 10 minutes early
+        </li>
+      </ul>
+
+      <!-- Visual progress bar -->
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="progress-label" id="progress-label">0 of 5 completed</div>
+    </div>
+
+    <!-- Section 2: Question Practice -->
+    <div class="section-label">Section 2</div>
+    <div class="card">
+      <h2>💬 Interview Question Practice</h2>
+      <p style="color:var(--muted);font-size:0.93rem;margin-bottom:20px;">
+        Click "Show Question" to reveal a practice question, then view a sample answer.
+      </p>
+
+      <div class="btn-row">
+        <button class="btn" onclick="showQuestion()">Show Question</button>
+        <button class="btn btn-outline" onclick="showAnswer()">Show Sample Answer</button>
+      </div>
+
+      <!-- Question output box -->
+      <div class="qa-box" id="q-box">
+        <div class="q-label">Interview Question</div>
+        <div class="q-text" id="q-text"></div>
+      </div>
+
+      <!-- Answer output box (shown after clicking Show Answer) -->
+      <div class="qa-box" id="a-box" style="margin-top:14px;">
+        <div class="a-label">Sample Answer</div>
+        <div class="a-text" id="a-text"></div>
+      </div>
+    </div>
+
+  </div><!-- /wrapper -->
+
+  <script>
+    // ══════════════════════════════════════════════════════════
+    //  SECTION 1 — CHECKLIST LOGIC
+    // ══════════════════════════════════════════════════════════
+
+    // toggleCheck — called when a checklist item is clicked
+    // It toggles the "done" class and updates the progress bar
+    function toggleCheck(item) {
+      item.classList.toggle('done');   // add or remove "done" style
+      updateProgress();
+    }
+
+    // updateProgress — counts done items and updates the bar
+    function updateProgress() {
+      const items = document.querySelectorAll('#checklist li');
+      const total = items.length;
+
+      // Count how many have the "done" class
+      let doneCount = 0;
+      items.forEach(function(item) {
+        if (item.classList.contains('done')) doneCount++;
+      });
+
+      // Calculate percentage
+      const percent = Math.round((doneCount / total) * 100);
+
+      // Update the bar width and label text
+      document.getElementById('progress-bar').style.width = percent + '%';
+      document.getElementById('progress-label').textContent =
+        doneCount + ' of ' + total + ' completed';
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SECTION 2 — QUESTION & ANSWER PRACTICE
+    // ══════════════════════════════════════════════════════════
+
+    // Predefined list of Q&A pairs stored as objects
+    const qaData = [
+      {
+        question: "Tell me about yourself.",
+        answer:
+          "I am [Your Name], a [Branch] student at [College]. I am passionate about technology and have worked on projects involving [Skills]. I am a quick learner who enjoys problem-solving and working in teams. I am eager to start my career and contribute positively to a growing organisation."
+      },
+      {
+        question: "What are your greatest strengths?",
+        answer:
+          "My greatest strengths are my analytical thinking and ability to learn quickly. When given a new challenge, I break it into smaller tasks and solve each step methodically. I am also a good team player — I communicate openly and always try to help my teammates when they are stuck."
+      },
+      {
+        question: "Why should we hire you?",
+        answer:
+          "I bring strong technical skills, a willingness to learn, and genuine enthusiasm for this role. I have worked on real projects that required me to apply theoretical knowledge practically. I am reliable, punctual, and motivated to grow — I believe I can add value to your team from day one."
+      },
+      {
+        question: "Where do you see yourself in five years?",
+        answer:
+          "In five years I see myself as a confident professional with deep expertise in my chosen domain. I want to take on responsibilities that let me lead small projects and mentor junior team members. I aim to continuously upskill so I can grow with the organisation and contribute to bigger goals."
+      }
+    ];
+
+    // Track which Q&A index is currently shown
+    let currentIndex = 0;
+
+    // showQuestion — reveals a question and hides the answer box
+    function showQuestion() {
+      // Pick next question (cycle through the list)
+      const qBox  = document.getElementById('q-box');
+      const aBox  = document.getElementById('a-box');
+
+      // Display the question text
+      document.getElementById('q-text').textContent = qaData[currentIndex].question;
+      qBox.style.display = 'block';
+
+      // Hide answer box so user must click separately
+      aBox.style.display = 'none';
+    }
+
+    // showAnswer — reveals the sample answer for the current question
+    function showAnswer() {
+      // Only show answer if a question is already visible
+      const qBox = document.getElementById('q-box');
+      if (qBox.style.display !== 'block') {
+        alert('Please click "Show Question" first!');
+        return;
+      }
+
+      document.getElementById('a-text').textContent = qaData[currentIndex].answer;
+      document.getElementById('a-box').style.display = 'block';
+
+      // Move to the next question index for the next click
+      currentIndex = (currentIndex + 1) % qaData.length;
+    }
+  </script>
+
+</body>
+</html>
