@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Tips — Placement Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="globalstyle.css" />
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+  <p class="header-eyebrow">Placement Preparation Series</p>
+  <h1>Interview <em>Tips</em></h1>
+  <p>Everything you need, stage by stage — click a card to explore the tips.</p>
+</header>
+
+<!-- CARDS -->
+<div class="cards-grid">
+
+  <div class="tip-card" data-key="before" onclick="selectCard(this)">
+    <span class="card-icon">📋</span>
+    <div class="card-step">Step 01</div>
+    <div class="card-title">Before Interview</div>
+    <p class="card-desc">Prepare yourself thoroughly before the interview day arrives.</p>
+    <span class="card-arrow">View tips</span>
+  </div>
+
+  <div class="tip-card" data-key="during" onclick="selectCard(this)">
+    <span class="card-icon">🎤</span>
+    <div class="card-step">Step 02</div>
+    <div class="card-title">During Interview</div>
+    <p class="card-desc">Behave professionally and make a strong first impression.</p>
+    <span class="card-arrow">View tips</span>
+  </div>
+
+  <div class="tip-card" data-key="answer" onclick="selectCard(this)">
+    <span class="card-icon">🧠</span>
+    <div class="card-step">Step 03</div>
+    <div class="card-title">Answering Questions</div>
+    <p class="card-desc">Techniques to answer interview questions effectively.</p>
+    <span class="card-arrow">View tips</span>
+  </div>
+
+  <div class="tip-card" data-key="after" onclick="selectCard(this)">
+    <span class="card-icon">🤝</span>
+    <div class="card-step">Step 04</div>
+    <div class="card-title">After Interview</div>
+    <p class="card-desc">Actions to take after finishing the interview session.</p>
+    <span class="card-arrow">View tips</span>
+  </div>
+
+</div>
+
+<!-- OUTPUT PANEL -->
+<div class="output-wrap">
+  <div class="output-panel" id="outputPanel">
+    <div class="panel-header">
+      <span class="panel-icon" id="panelIcon"></span>
+      <div>
+        <div class="panel-title" id="panelTitle"></div>
+        <div class="panel-sub" id="panelSub"></div>
+      </div>
+      <div class="panel-badge" id="panelBadge"></div>
+    </div>
+    <div class="tips-list" id="tipsList"></div>
+  </div>
+</div>
+
+<footer>Click any stage card above to reveal its tips &nbsp;·&nbsp; Placement Prep Module</footer>
+
+<script>
+const data = {
+  before: {
+    icon: '📋',
+    title: 'Before Interview',
+    sub: 'Preparation tips for the day before',
+    badge: '10 Tips',
+    tips: [
+      'Research the company background and recent news',
+      'Understand the job role requirements in detail',
+      'Practice your self-introduction until it feels natural',
+      'Review your resume carefully and know every line',
+      'Prepare examples of your best projects and work',
+      'Plan your outfit in advance — dress professionally',
+      'Carry multiple printed copies of your resume',
+      'Check interview timing, location, and travel route',
+      'Prepare answers for common interview questions',
+      'Get enough sleep the night before interview day'
+    ]
+  },
+  during: {
+    icon: '🎤',
+    title: 'During Interview',
+    sub: 'Professional conduct during the interview',
+    badge: '10 Tips',
+    tips: [
+      'Maintain comfortable, consistent eye contact',
+      'Listen carefully and fully before answering',
+      'Speak clearly, at a measured pace, with confidence',
+      'Do not interrupt the interviewer at any point',
+      'Stay calm and composed even under pressure',
+      'Use specific examples when answering questions',
+      'Maintain good posture — sit upright and open',
+      'Be polite, respectful, and genuinely warm',
+      'Show enthusiasm and genuine interest in the role',
+      'Avoid making negative comments about others'
+    ]
+  },
+  answer: {
+    icon: '🧠',
+    title: 'Answering Questions',
+    sub: 'Frameworks and techniques for strong answers',
+    badge: '10 Tips',
+    tips: [
+      'Use the STAR method: Situation, Task, Action, Result',
+      'Give real-life examples from projects or academics',
+      'Keep answers structured with a clear beginning and end',
+      'Be honest — never fabricate experiences or skills',
+      'Focus on your personal contributions and achievements',
+      'Avoid sounding robotic — let your personality come through',
+      'Explain your thought process, not just your conclusions',
+      'Highlight teamwork and collaboration experiences',
+      'Show genuine willingness to learn and grow',
+      'Keep answers concise — aim for 60–120 seconds each'
+    ]
+  },
+  after: {
+    icon: '🤝',
+    title: 'After Interview',
+    sub: 'Next steps once the interview ends',
+    badge: '10 Tips',
+    tips: [
+      'Thank the interviewer sincerely before leaving',
+      'Ask thoughtful questions about the role or team',
+      'Send a professional follow-up thank-you email within 24 hrs',
+      'Reflect honestly on your overall performance',
+      'Note down questions that were asked for future practice',
+      'Identify specific areas where you can improve',
+      'Stay positive and patient regardless of the outcome',
+      'Keep preparing actively for upcoming interviews',
+      'Maintain professional communication with the company',
+      'Continue upskilling — every interview is a learning step'
+    ]
+  }
+};
+
+let activeKey = null;
+
+function selectCard(card) {
+  const key = card.dataset.key;
+
+  // Toggle off if clicking same card
+  if (activeKey === key) {
+    card.classList.remove('active');
+    document.getElementById('outputPanel').classList.remove('visible');
+    activeKey = null;
+    return;
+  }
+
+  // Deactivate all cards
+  document.querySelectorAll('.tip-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  activeKey = key;
+
+  const d = data[key];
+  const panel = document.getElementById('outputPanel');
+
+  // Update panel content
+  document.getElementById('panelIcon').textContent  = d.icon;
+  document.getElementById('panelTitle').textContent = d.title;
+  document.getElementById('panelSub').textContent   = d.sub;
+  document.getElementById('panelBadge').textContent = d.badge;
+  panel.dataset.key = key;
+
+  // Build tips list
+  const list = document.getElementById('tipsList');
+  list.innerHTML = '';
+  d.tips.forEach(tip => {
+    const item = document.createElement('div');
+    item.className = 'tip-item';
+    item.innerHTML = `<div class="tip-dot"></div><div class="tip-text">${tip}</div>`;
+    list.appendChild(item);
+  });
+
+  // Re-trigger animation
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+
+  // Smooth scroll to panel
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 80);
+}
+</script>
+</body>
+</html>

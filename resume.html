@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Preparation – Resume Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="globalstyle.css" />
+  <!-- ═══════════════════════════════════════════════════
+       SCREEN STYLES
+  ════════════════════════════════════════════════════ -->
+</head>
+<body>
+
+<!-- Print container — only visible during window.print() -->
+<div id="print-container" style="display:none;"></div>
+
+<!-- ── Header ─────────────────────────────────────────── -->
+<header>
+  <a class="back-link" href="index.html">← Back to Home</a>
+  <h1>Resume Builder</h1>
+  <p>Fill your details · Pick a template · Print or Save as PDF</p>
+</header>
+
+<!-- ── Page Layout ───────────────────────────────────── -->
+<div class="page-wrap">
+
+  <!-- ══ LEFT: Form + Tips ═════════════════════════════ -->
+  <div>
+
+    <!-- SECTION 1: Input Form -->
+    <div class="card">
+      <div class="card-title">📋 Section 1 — Your Details</div>
+
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" placeholder="e.g. Arjun Sharma"/>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="e.g. arjun@email.com"/>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="e.g. 9876543210"/>
+      </div>
+      <div class="form-group">
+        <label for="skills">Skills <small style="font-weight:400;text-transform:none">(comma separated)</small></label>
+        <input type="text" id="skills" placeholder="e.g. Python, Java, HTML, CSS"/>
+      </div>
+      <div class="form-group">
+        <label for="proj-title">Project Title</label>
+        <input type="text" id="proj-title" placeholder="e.g. Student Placement Portal"/>
+      </div>
+      <div class="form-group">
+        <label for="proj-desc">Project Description</label>
+        <textarea id="proj-desc" rows="4" placeholder="Describe your project: what it does, technologies used, and outcome..."></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Template Selection -->
+    <div class="card">
+      <div class="card-title">🎨 Section 2 — Choose Template</div>
+      <div class="form-group">
+        <label for="tpl-select">Resume Template</label>
+        <select id="tpl-select">
+          <option value="simple">Simple Resume — Plain &amp; Classic</option>
+          <option value="modern">Modern Resume — Two-Column Sidebar</option>
+          <option value="professional">Professional Resume — Boxed Corporate Style</option>
+        </select>
+      </div>
+      <!-- SECTION 3: Preview button -->
+<button class="btn btn-primary" onclick="goPreview()">👁&nbsp; Preview Resume
+</button>        
+      </button>
+    </div>
+
+    <!-- SECTION 6: Tips Box -->
+    <div class="tips-box">
+      <h3>💡 Resume Tips</h3>
+      <ul>
+        <li>Keep your resume within one page</li>
+        <li>Use clear, bold headings for each section</li>
+        <li>Highlight your strongest skills first</li>
+        <li>Always include at least one real project</li>
+        <li>Proofread carefully — no spelling mistakes</li>
+      </ul>
+    </div>
+
+  </div><!-- /left col -->
+
+  <!-- ══ RIGHT: Preview ════════════════════════════════ -->
+  <div>
+
+    <!-- Placeholder before first preview -->
+   
+    <!-- SECTIONS 4 + 5: Output + Action Buttons -->
+    <div id="resume-output-wrap">
+
+      <!-- SECTION 5: Print/Save + Copy buttons -->
+      <div class="action-row">
+        <button class="btn btn-print" onclick="printResume()">
+          🖨&nbsp; Print / Save as PDF
+        </button>
+        <button class="btn btn-copy" onclick="copyResume()">
+          📋&nbsp; Copy Resume Text
+        </button>
+      </div>
+
+      <!-- SECTION 4: Resume preview (template class added by JS) -->
+      <div id="resume-output"></div>
+
+    </div>
+
+  </div><!-- /right col -->
+
+</div><!-- /page-wrap -->
+
+<!-- Toast notification -->
+<div id="toast"></div>
+
+<div class="card">
+  <h2 class="card-title">🎥 Resume Building Videos</h2>
+
+  <div style="display:grid; gap:15px;">
+
+    <iframe width="100%" height="200"
+      src="https://www.youtube.com/embed/y8YH0Qbu5h4"
+      title="Resume Tips"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+
+    <iframe width="100%" height="200"
+      src="https://www.youtube.com/embed/TeStE0YRPgI"
+      title="ATS Resume Guide"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+
+  </div>
+</div>
+<div class="card">
+  <h2 class="card-title">📄 Sample Resumes</h2>
+
+  <div style="display:grid; gap:12px;">
+
+    <div style="padding:12px; border:1px solid #dde3ec; border-radius:10px;">
+      <h3>Fresher Resume</h3>
+      <p>Basic resume format for students</p>
+      <button onclick="window.open('sample/fresher.pdf')">View</button>
+    </div>
+
+    <div style="padding:12px; border:1px solid #dde3ec; border-radius:10px;">
+      <h3>Developer Resume</h3>
+      <p>For web/software developers</p>
+      <button onclick="window.open('sample/developer.pdf')">View</button>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT — fully commented for beginners
+════════════════════════════════════════════════════ -->
+<script>
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     generateResume()
+     Called when the user clicks "Preview Resume".
+     Steps: read inputs → validate → build HTML → inject → show output area.
+  ───────────────────────────────────────────────────────────────────────── */
+  function generateResume() {
+
+    // Step 1: Read every form field and remove extra spaces
+    var name      = document.getElementById('fullname').value.trim();
+    var email     = document.getElementById('email').value.trim();
+    var phone     = document.getElementById('phone').value.trim();
+    var skills    = document.getElementById('skills').value.trim();
+    var projTitle = document.getElementById('proj-title').value.trim();
+    var projDesc  = document.getElementById('proj-desc').value.trim();
+    var template  = document.getElementById('tpl-select').value;
+
+    // Step 2: Make sure no field is empty
+    if (!name || !email || !phone || !skills || !projTitle || !projDesc) {
+      alert('Please fill in all fields before previewing your resume.');
+      return; // Stop here if anything is missing
+    }
+
+    // Step 3: Convert the skills string into an array
+    // e.g. "Python, Java, HTML" → ["Python", "Java", "HTML"]
+    var skillArray = skills.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+
+    // Step 4: Choose which template function to call
+    var html = '';
+    if (template === 'simple') {
+      html = buildSimple(name, email, phone, skillArray, projTitle, projDesc);
+    } else if (template === 'modern') {
+      html = buildModern(name, email, phone, skillArray, projTitle, projDesc);
+    } else {
+      html = buildProfessional(name, email, phone, skillArray, projTitle, projDesc);
+    }
+
+    // Step 5: Apply the correct CSS class and inject the HTML
+    var outputEl = document.getElementById('resume-output');
+    outputEl.className = 'tpl-' + template;  // sets class like "tpl-simple"
+    outputEl.innerHTML = html;
+
+    // Step 6: Show the output area and hide the placeholder
+    document.getElementById('resume-output-wrap').style.display = 'block';
+    document.getElementById('preview-placeholder').style.display = 'none';
+
+    // Step 7: Smoothly scroll to the resume preview on small screens
+    outputEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     buildSimple()
+     Template 1 — plain monospace layout, minimal styling, classic look.
+     Returns an HTML string.
+  ───────────────────────────────────────────────────────────────────────── */
+  function buildSimple(name, email, phone, skills, projTitle, projDesc) {
+
+    // Build skill badge HTML (each skill in a small bordered box)
+    var skillHTML = skills.map(function(s) {
+      return '<span>' + s + '</span>';
+    }).join('');
+
+    return (
+      '<div class="r-name">' + name + '</div>' +
+      '<div class="r-contact">' + email + ' &nbsp;|&nbsp; ' + phone + '</div>' +
+      '<hr/>' +
+      '<div class="r-sec-title">Skills</div>' +
+      '<div class="r-skills">' + skillHTML + '</div>' +
+      '<hr/>' +
+      '<div class="r-sec-title">Project</div>' +
+      '<div class="r-proj-title">' + projTitle + '</div>' +
+      '<div class="r-proj-desc">' + projDesc + '</div>' +
+      '<div class="r-footer">— End of Resume —</div>'
+    );
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     buildModern()
+     Template 2 — two-column layout: dark sidebar (contact + skills) and
+     a clean white main body (objective + project).
+     Returns an HTML string.
+  ───────────────────────────────────────────────────────────────────────── */
+  function buildModern(name, email, phone, skills, projTitle, projDesc) {
+
+    // Build skill chips for the sidebar
+    var chipHTML = skills.map(function(s) {
+      return '<span class="m-skill-chip">' + s + '</span>';
+    }).join('');
+
+    return (
+      // ── Sidebar ──
+      '<div class="m-sidebar">' +
+        '<div class="m-name">' + name + '</div>' +
+        '<div class="m-sec-label">Contact</div>' +
+        '<div class="m-contact-item">✉ ' + email + '</div>' +
+        '<div class="m-contact-item">📞 ' + phone + '</div>' +
+        '<div class="m-sec-label">Skills</div>' +
+        '<div>' + chipHTML + '</div>' +
+      '</div>' +
+      // ── Main body ──
+      '<div class="m-body">' +
+        '<p class="m-objective">' +
+          'A motivated student eager to apply technical skills and contribute positively to a professional team. ' +
+          'Committed to continuous learning and growth.' +
+        '</p>' +
+        '<div class="m-body-title">Projects</div>' +
+        '<div class="m-proj-title">' + projTitle + '</div>' +
+        '<div class="m-proj-desc">' + projDesc + '</div>' +
+      '</div>'
+    );
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     buildProfessional()
+     Template 3 — gradient header banner, then each section in a bordered box.
+     Returns an HTML string.
+  ───────────────────────────────────────────────────────────────────────── */
+  function buildProfessional(name, email, phone, skills, projTitle, projDesc) {
+
+    // Build skill tag pills
+    var tagHTML = skills.map(function(s) {
+      return '<span class="p-skill-tag">' + s + '</span>';
+    }).join('');
+
+    return (
+      // ── Coloured header ──
+      '<div class="p-header">' +
+        '<div class="p-name">' + name + '</div>' +
+        '<div class="p-contact">' + email + '<br/>' + phone + '</div>' +
+      '</div>' +
+      '<div class="p-body">' +
+        // ── Skills box ──
+        '<div class="p-box">' +
+          '<div class="p-box-hd">Technical Skills</div>' +
+          '<div class="p-box-body">' + tagHTML + '</div>' +
+        '</div>' +
+        // ── Project box ──
+        '<div class="p-box">' +
+          '<div class="p-box-hd">Project Experience</div>' +
+          '<div class="p-box-body">' +
+            '<div class="p-proj-title">' + projTitle + '</div>' +
+            '<div class="p-proj-desc">'  + projDesc  + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     printResume()
+     SECTION 5 — Practical Feature.
+     Moves the resume element into a special #print-container div that is
+     the ONLY thing shown during @media print, calls window.print(), then
+     moves the resume back so the screen view is unchanged.
+
+     In the browser print dialog the user can:
+       • Print to a physical printer
+       • Choose "Save as PDF" to get a PDF file of their resume
+  ───────────────────────────────────────────────────────────────────────── */
+  function printResume() {
+    var outputEl   = document.getElementById('resume-output');
+    var outputWrap = document.getElementById('resume-output-wrap');
+    var printCont  = document.getElementById('print-container');
+
+    // Guard: make sure a resume exists before printing
+    if (outputWrap.style.display === 'none' || !outputEl.innerHTML) {
+      alert('Please click "Preview Resume" first to generate your resume.');
+      return;
+    }
+
+    // Move the resume into the print-only container
+    printCont.appendChild(outputEl);
+    printCont.style.display = 'block';
+
+    // Open the browser's print / save dialog
+    window.print();
+
+    // After the dialog closes, move the resume back to its normal spot
+    outputWrap.appendChild(outputEl);
+    printCont.style.display = 'none';
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     copyResume()
+     OPTIONAL FEATURE — copies the resume's visible text to the clipboard.
+     Uses the modern Clipboard API with a fallback for older browsers.
+  ───────────────────────────────────────────────────────────────────────── */
+  function copyResume() {
+    var outputEl = document.getElementById('resume-output');
+
+    // Guard: nothing to copy if resume not yet generated
+    if (!outputEl.innerHTML) {
+      alert('Please generate your resume first by clicking "Preview Resume".');
+      return;
+    }
+
+    // Get plain visible text (innerText strips HTML tags)
+    var resumeText = outputEl.innerText;
+
+    // Try the modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(resumeText)
+        .then(function() {
+          showToast('✅ Resume text copied to clipboard!');
+        })
+        .catch(function() {
+          fallbackCopy(resumeText);
+        });
+    } else {
+      // Fallback for browsers that don't support Clipboard API
+      fallbackCopy(resumeText);
+    }
+  }
+
+  /* fallbackCopy — uses an invisible textarea + execCommand for old browsers */
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ Resume copied!');
+  }
+
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     showToast()
+     Shows a small notification message at the bottom-right for 2.5 seconds.
+  ───────────────────────────────────────────────────────────────────────── */
+  function showToast(msg) {
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+
+function goPreview() {
+
+  // store values in browser
+  localStorage.setItem("fullname", document.getElementById('fullname').value);
+  localStorage.setItem("email", document.getElementById('email').value);
+  localStorage.setItem("phone", document.getElementById('phone').value);
+  localStorage.setItem("skills", document.getElementById('skills').value);
+  localStorage.setItem("projTitle", document.getElementById('proj-title').value);
+  localStorage.setItem("projDesc", document.getElementById('proj-desc').value);
+  localStorage.setItem("template", document.getElementById('tpl-select').value);
+
+  // move to next page
+  window.location.href = "preview.html";
+}
+function openResume(fileName) {
+  window.open("sample/" + fileName, "_blank");
+}
+</script>
+</body>
+</html>

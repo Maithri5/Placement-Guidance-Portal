@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NoteVault — Academic Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="globalstyle.css" />
+</head>
+<body>
+
+<div class="ambient">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header class="header">
+  <div class="logo" onclick="goHome()">
+    <div class="logo-mark">N</div>
+    <span class="logo-name">NoteVault</span>
+  </div>
+  <div class="hdiv"></div>
+  <nav class="breadcrumb" id="breadcrumb"></nav>
+</header>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <div class="eyebrow"><span class="eyebrow-dot"></span><span id="eyebrow">Engineering Notes</span></div>
+    <h1 class="hero-title" id="heroTitle">Your Academic <span class="hl">Notes Hub</span></h1>
+    <p class="hero-sub" id="heroSub">Browse by year, branch, and subject — find your PDFs in seconds.</p>
+  </section>
+
+  <div class="nav-row" id="navRow" style="display:none">
+    <button class="btn-back" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+      Back
+    </button>
+    <span class="lvl-pill" id="lvlPill"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+const DATA = {
+  years: [
+    { id:1, label:"Year 1", icon:"🎓", meta:"Foundation · 1 Branch",  th:"th-amber"  },
+    { id:2, label:"Year 2", icon:"📗", meta:"Core · 3 Branches",       th:"th-blue"   },
+    { id:3, label:"Year 3", icon:"📘", meta:"Advanced · 2 Branches",   th:"th-violet" },
+    { id:4, label:"Year 4", icon:"🏆", meta:"Final Year · 1 Branch",   th:"th-green"  },
+  ],
+  branches: {
+    1:[
+      { id:"1-CMN", label:"Common",  icon:"🏫", meta:"Shared foundation curriculum",          th:"th-amber"  },
+    ],
+    2:[
+      { id:"2-CSE", label:"CSE",     icon:"💻", meta:"Computer Science & Engineering",        th:"th-blue"   },
+      { id:"2-ECE", label:"ECE",     icon:"📡", meta:"Electronics & Comm. Engineering",       th:"th-teal"   },
+      { id:"2-EEE", label:"EEE",     icon:"⚡",  meta:"Electrical & Electronics Engineering", th:"th-amber"  },
+    ],
+    3:[
+      { id:"3-CSE", label:"CSE",     icon:"💻", meta:"Computer Science & Engineering",        th:"th-violet" },
+      { id:"3-ECE", label:"ECE",     icon:"📡", meta:"Electronics & Comm. Engineering",       th:"th-teal"   },
+    ],
+    4:[
+      { id:"4-CSE", label:"CSE",     icon:"💻", meta:"Computer Science & Engineering",        th:"th-green"  },
+    ],
+  },
+  subjects: {
+    "1-CMN":[
+      { id:"s01", label:"Engineering Maths I",       icon:"📐", meta:"Calculus & Linear Algebra",            th:"th-amber"  },
+      { id:"s02", label:"Engineering Physics",        icon:"⚛️",  meta:"Waves, Optics & Quantum Mechanics",    th:"th-blue"   },
+      { id:"s03", label:"Engineering Chemistry",      icon:"🧪", meta:"Organic & Inorganic Chemistry",        th:"th-rose"   },
+      { id:"s04", label:"Prog. & Problem Solving",    icon:"🖥️",  meta:"C Language Fundamentals",              th:"th-violet" },
+    ],
+    "2-CSE":[
+      { id:"s05", label:"Data Structures",            icon:"🗂️",  meta:"Arrays, Trees & Graphs",               th:"th-blue"   },
+      { id:"s06", label:"DBMS",                       icon:"🗄️",  meta:"SQL & Relational Model",                th:"th-violet" },
+      { id:"s07", label:"Operating Systems",          icon:"🖥️",  meta:"Process & Memory Management",          th:"th-teal"   },
+      { id:"s08", label:"Computer Networks",          icon:"🌐", meta:"TCP/IP & OSI Model",                   th:"th-green"  },
+    ],
+    "2-ECE":[
+      { id:"s09", label:"Electronic Circuits",        icon:"🔌", meta:"Amplifiers & Filter Design",           th:"th-orange" },
+      { id:"s10", label:"Signals & Systems",           icon:"📈", meta:"Fourier & Laplace Transforms",         th:"th-teal"   },
+      { id:"s11", label:"Digital Circuits",            icon:"🔢", meta:"Gates, Flip-flops & Counters",         th:"th-violet" },
+    ],
+    "2-EEE":[
+      { id:"s12", label:"Electrical Machines",         icon:"⚙️",  meta:"DC & AC Machines",                    th:"th-amber"  },
+      { id:"s13", label:"Power Systems",               icon:"🔋", meta:"Generation & Distribution",            th:"th-teal"   },
+      { id:"s14", label:"Control Theory",              icon:"🎛️",  meta:"PID & Transfer Functions",             th:"th-blue"   },
+    ],
+    "3-CSE":[
+      { id:"s15", label:"Artificial Intelligence",     icon:"🤖", meta:"Search Strategies & Knowledge Repr.", th:"th-violet" },
+      { id:"s16", label:"Compiler Design",             icon:"⚙️",  meta:"Lexers, Parsers & Code Gen",          th:"th-blue"   },
+      { id:"s17", label:"Machine Learning",            icon:"📊", meta:"Supervised & Unsupervised ML",        th:"th-teal"   },
+      { id:"s18", label:"Software Engineering",        icon:"🏗️",  meta:"SDLC, UML & Design Patterns",         th:"th-amber"  },
+    ],
+    "3-ECE":[
+      { id:"s19", label:"VLSI Design",                 icon:"🔬", meta:"CMOS Design & Physical Layout",       th:"th-rose"   },
+      { id:"s20", label:"Digital Signal Processing",   icon:"🎵", meta:"FFT, DFT & Digital Filters",          th:"th-blue"   },
+    ],
+    "4-CSE":[
+      { id:"s21", label:"Cloud Computing",             icon:"☁️",  meta:"AWS, Azure & GCP Fundamentals",       th:"th-blue"   },
+      { id:"s22", label:"Deep Learning",               icon:"🧠", meta:"CNN, RNN & Transformers",              th:"th-violet" },
+      { id:"s23", label:"Big Data Analytics",          icon:"📦", meta:"Hadoop, Spark & HDFS Ecosystem",      th:"th-green"  },
+    ],
+  },
+  units:[
+    { num:1, label:"Unit I",   meta:"Introduction & Basics",         th:"th-amber"  },
+    { num:2, label:"Unit II",  meta:"Core Concepts & Theory",        th:"th-blue"   },
+    { num:3, label:"Unit III", meta:"Advanced Topics",               th:"th-teal"   },
+    { num:4, label:"Unit IV",  meta:"Applications & Case Studies",   th:"th-violet" },
+    { num:5, label:"Unit V",   meta:"Problems, Practice & Exams",    th:"th-rose"   },
+  ],
+};
+
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+const S = { level:0, year:null, yL:"", branch:null, bL:"", subject:null, sL:"", unit:null, stack:[] };
+
+function push(patch, lvl) {
+
+S.stack.push({
+level: S.level,
+year: S.year,
+yL: S.yL,
+branch: S.branch,
+bL: S.bL,
+subject: S.subject,
+sL: S.sL,
+unit: S.unit
+});
+
+Object.assign(S, patch);
+
+S.level = lvl;
+
+render();
+
+}
+function goBack() {
+
+if (S.stack.length === 0) return;
+
+const prev = S.stack.pop();
+
+S.level = prev.level;
+S.year = prev.year;
+S.yL = prev.yL;
+S.branch = prev.branch;
+S.bL = prev.bL;
+S.subject = prev.subject;
+S.sL = prev.sL;
+S.unit = prev.unit;
+
+render();
+
+}
+function goHome() {
+
+S.stack = [];
+
+S.level = 0;
+
+S.year = null;
+S.branch = null;
+S.subject = null;
+S.unit = null;
+
+S.yL = "";
+S.bL = "";
+S.sL = "";
+
+render();
+
+}
+
+/* ══════════════════════════════════════════
+   BREADCRUMB
+══════════════════════════════════════════ */
+function renderCrumbs() {
+  const el = document.getElementById("breadcrumb");
+  el.innerHTML = "";
+  const crumbs = [{label:"Home", lvl:0}];
+  if (S.year)    crumbs.push({label:S.yL, lvl:1});
+  if (S.branch)  crumbs.push({label:S.bL, lvl:2});
+  if (S.subject) crumbs.push({label:S.sL, lvl:3});
+  if (S.unit)    crumbs.push({label:`Unit ${S.unit}`, lvl:4});
+
+  crumbs.forEach((c,i) => {
+    if (i>0) { const s=document.createElement("span"); s.className="crumb-sep"; s.textContent="/"; el.appendChild(s); }
+    const sp = document.createElement("span");
+    sp.className = "crumb" + (i===crumbs.length-1?" cur":"");
+    sp.textContent = c.label;
+    if (i<crumbs.length-1) sp.onclick = () => jumpTo(c.lvl);
+    el.appendChild(sp);
+  });
+}
+function jumpTo(lvl) {
+
+while (S.stack.length > lvl) {
+S.stack.pop();
+}
+
+const prev = S.stack.pop();
+
+if (prev) {
+Object.assign(S, prev);
+}
+
+render();
+
+}
+
+/* ══════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════ */
+const HERO = {
+  0:{ey:"Engineering Notes",  ti:"Your Academic <span class='hl'>Notes Hub</span>",     sub:"Browse by year, branch, and subject — find your PDFs in seconds.", pill:""},
+  1:{ey:"Step 2",             ti:"Choose Your <span class='hl'>Branch</span>",    sub:"Select your department to continue.",                               pill:"Branches"},
+  2:{ey:"Step 3",             ti:"Select a <span class='hl'>Subject</span>",            sub:"Pick a subject to explore its units.",                              pill:"Subjects"},
+  3:{ey:"Step 4",             ti:"Pick a <span class='hl'>Unit</span>",                 sub:"Each unit contains class notes, handwritten notes & question banks.",pill:"Units"},
+  4:{ey:"Step 5",             ti:"PDF <span class='hl'>Notes</span>",                   sub:"Click any card to open the PDF in a new tab.",                      pill:"Files"},
+};
+function render() {
+  // Bounce hero animation
+  const hero=document.getElementById("hero");
+  hero.style.animation="none"; void hero.offsetHeight; hero.style.animation="";
+
+  const lvl = S.level;
+  document.getElementById("eyebrow").textContent = [
+    "Engineering Notes","Year → Branch","Branch → Subject","Subject → Unit","Unit → PDFs"
+  ][lvl];
+  document.getElementById("heroTitle").innerHTML = [
+    "Your Academic <span class='hl'>Notes Hub</span>",
+    "Choose Your <span class='hl'>Branch</span>",
+    "Select a <span class='hl'>Subject</span>",
+    "Pick a <span class='hl'>Unit</span>",
+    "PDF <span class='hl'>Notes</span>",
+  ][lvl];
+  document.getElementById("heroSub").textContent = [
+    "Browse by year, branch, and subject — find your PDFs in seconds.",
+    "Select your department to continue.",
+    "Pick a subject to explore its units.",
+    "Each unit contains class notes, handwritten notes & question banks.",
+    "Click any card to open the PDF in a new tab.",
+  ][lvl];
+
+  const navRow = document.getElementById("navRow");
+  navRow.style.display = lvl>0?"flex":"none";
+  document.getElementById("lvlPill").textContent = ["","Branches","Subjects","Units","Files"][lvl];
+
+  renderCrumbs();
+
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+
+  if(lvl===0) buildYears(grid);
+  else if(lvl===1) buildBranches(grid);
+  else if(lvl===2) buildSubjects(grid);
+  else if(lvl===3) buildUnits(grid);
+  else buildPDFs(grid);
+}
+
+/* ══════════════════════════════════════════
+   CARD FACTORY
+══════════════════════════════════════════ */
+function mkCard({icon,title,meta,th,extra="",onclick}){
+  const d=document.createElement("div");
+  d.className=`card ${th}`;
+  d.innerHTML=`<div class="card-icon">${icon}</div><div class="card-title">${title}</div><div class="card-meta">${meta}</div>${extra}<div class="card-arr">↗</div>`;
+  d.onclick=onclick; return d;
+}
+function mkEmpty(msg){
+  const d=document.createElement("div"); d.className="empty";
+  d.innerHTML=`<div class="empty-ico">📭</div><p>${msg}</p>`; return d;
+}
+
+function buildYears(grid) {
+
+grid.innerHTML = "";
+
+DATA.years.forEach(y => {
+
+grid.appendChild(mkCard({
+
+icon: y.icon,
+title: y.label,
+meta: y.meta,
+th: y.th,
+
+onclick: () =>
+push({
+year: y.id,
+yL: y.label
+}, 1)
+
+}));
+
+});
+
+}
+function buildBranches(grid) {
+
+grid.innerHTML = "";
+
+getBranches(S.year).then(branches => {
+
+if(branches.length === 0){
+
+grid.appendChild(mkEmpty("No branches found"));
+
+return;
+
+}
+
+branches.forEach(b => {
+
+grid.appendChild(mkCard({
+
+icon: b.icon,
+title: b.label,
+meta: b.meta,
+th: b.th,
+
+onclick: () =>
+push({
+branch: b.id,
+bL: b.label
+}, 2)
+
+}));
+
+});
+
+});
+
+}
+function buildSubjects(grid) {
+
+grid.innerHTML = "";
+
+getSubjects(S.branch).then(subjects => {
+
+if (!subjects || subjects.length === 0) {
+
+grid.appendChild(mkEmpty("No subjects found"));
+
+return;
+
+}
+
+subjects.forEach(s => {
+
+grid.appendChild(mkCard({
+
+icon: s.icon,
+title: s.label,
+meta: s.meta,
+th: s.th,
+
+onclick: () =>
+push({
+subject: s.id,
+sL: s.label
+}, 3)
+
+}));
+
+});
+
+});
+
+}
+function buildUnits(grid) {
+
+grid.innerHTML = "";
+
+DATA.units.forEach(u => {
+
+const d = document.createElement("div");
+
+d.className = `card ${u.th}`;
+
+d.innerHTML = `
+<div class="card-icon">${u.num}</div>
+<div class="card-title">${u.label}</div>
+<div class="card-meta">${u.meta}</div>
+<div class="card-arr">↗</div>
+`;
+
+d.onclick = () =>
+push({
+unit: u.num   // IMPORTANT
+}, 4);
+
+grid.appendChild(d);
+
+});
+
+}
+function buildPDFs(grid) {
+
+grid.innerHTML = "";
+
+getPdfs(S.subject, S.unit).then(pdfs => {
+
+console.log("PDFs from DB:", pdfs);
+
+if (!pdfs || pdfs.length === 0) {
+grid.appendChild(mkEmpty("No PDFs found"));
+return;
+}
+
+pdfs.forEach(p => {
+
+const d=document.createElement("div");
+
+d.className="card th-blue";
+
+d.innerHTML=`
+<div class="card-icon">📄</div>
+<div class="card-title">${p.title}</div>
+<div class="card-meta">PDF File</div>
+<div class="pdf-badge">PDF</div>
+<div class="card-arr">↗</div>
+`;
+
+d.onclick = () => {
+
+console.log("Opening file:", p.file);
+
+window.open(p.file, "_blank");
+
+};
+
+grid.appendChild(d);
+
+});
+
+});
+
+}
+function getSubjects(branchId) {
+
+return fetch("fetch_subjects.php?branch_id=" + branchId)
+
+.then(response => response.json())
+
+.then(data => {
+
+console.log("Subjects from DB:", data);
+
+return data.map(s => ({
+id: s.subject_id,
+label: s.subject_name,
+icon: "📘",
+meta: "Subject Notes",
+th: "th-blue"
+}));
+
+})
+
+.catch(error => {
+
+console.error("Subject fetch error:", error);
+
+return [];
+
+});
+
+}
+function getBranches(yearId) {
+
+return fetch("fetch_branches.php?year_id=" + yearId)
+
+.then(response => response.json())
+
+.then(data => {
+
+console.log("Branches from DB:", data);
+
+return data.map(b => ({
+id: b.branch_id,
+label: b.branch_name,
+icon: "🏫",
+meta: "Branch Subjects",
+th: "th-blue"
+}));
+
+})
+
+.catch(error => {
+
+console.error("Branch fetch error:", error);
+
+return [];
+
+});
+
+}
+function getPdfs(subjectId, unitNum) {
+
+return fetch(
+"fetch_pdfs.php?subject_id=" + subjectId +
+"&unit_id=" + unitNum
+)
+
+.then(response => response.json())
+
+.then(data => {
+
+console.log("Raw DB data:", data);
+
+return data.map(p => ({
+title: p.pdf_title,
+file: p.pdf_path
+}));
+
+})
+
+.catch(error => {
+
+console.error("Fetch error:", error);
+
+return [];
+
+});
+
+}
+/* Boot */
+render();
+</script>
+</body>
+</html>

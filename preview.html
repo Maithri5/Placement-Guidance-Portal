@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume Preview</title>
+  <link rel="stylesheet" href="globalstyle.css" />
+
+</head>
+
+<body>
+
+<h2 style="text-align:center;">Your Resume</h2>
+
+<div id="resume-output"></div>
+
+<script>
+var name = localStorage.getItem("fullname") || "No Name";
+var email = localStorage.getItem("email") || "No Email";
+var phone = localStorage.getItem("phone") || "No Phone";
+
+var skillsRaw = localStorage.getItem("skills") || "";
+var skills = skillsRaw ? skillsRaw.split(",").filter(s => s.trim() !== "") : [];
+
+var projTitle = localStorage.getItem("projTitle") || "No Project";
+var projDesc = localStorage.getItem("projDesc") || "No Description";
+
+var template = localStorage.getItem("template") || "simple";
+
+var skillHTML = skills.map(s => "<li>" + s.trim() + "</li>").join("");
+
+var output = document.getElementById("resume-output");
+output.className = "tpl-" + template;
+
+/* TEMP SIMPLE OUTPUT (to confirm it's working) */
+output.innerHTML = `
+  <div class="resume-section">
+    <p><b>Name:</b> ${name}</p>
+    <hr>
+
+    <p><b>Email:</b> ${email}</p>
+    <hr>
+
+    <p><b>Phone:</b> ${phone}</p>
+    <hr>
+
+    <p><b>Skills:</b></p>
+    <ul>
+      ${skillHTML}
+    </ul>
+    <hr>
+
+    <p><b>Project Title:</b> ${projTitle}</p>
+    <p><b>Project Description:</b> ${projDesc}</p>
+  </div>
+`;
+</script>
+<button onclick="window.print()" 
+style="
+  display:block;
+  margin:20px auto;
+  padding:10px 18px;
+  background:#1a3c5e;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+">
+🖨 Download / Save as PDF
+</button>
+
+</body>
+</html>
